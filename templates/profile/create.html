@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %} {{ block.super }} - Create{% endblock %}
+
+{% block main_content %}
+  <form method='POST', action=''>
+    <ul>
+      {{ user_profile_form.as_ul }}
+      {{ education_profile_form.as_ul }}
+    </ul>
+    {% csrf_token %}
+    <input type='submit' value='Create Profile'/>
+  </form>
+{% endblock %}
