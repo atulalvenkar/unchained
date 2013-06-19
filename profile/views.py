@@ -1,4 +1,5 @@
 from profile.models import UserProfile, EducationProfile
+from permissions.models import GrantedPermissions
 from profile.forms import UserProfileForm, EducationProfileForm
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -6,11 +7,11 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 
 def show(request):
-    profiles = UserProfile.objects.filter(owner=request.user)
-    educationprofiles = EducationProfile.objects.filter(owner=request.user)
+    profile = UserProfile.objects.filter(owner=request.user)[0]
+    educationprofile = EducationProfile.objects.filter(owner=request.user)[0]
     context = {
-        "profiles" : profiles,
-        "educationprofiles" : educationprofiles
+        "profile" : profile,
+        "educationprofile" : educationprofile
     }
     return render_to_response(
         'profile/show.html',
@@ -19,9 +20,16 @@ def show(request):
     )
 
 def show_other(request, userhash):
-    profiles = UserProfile.objects.filter(owner_hash=userhash)
+#    import pdb; pdb.set_trace()
+    profile = UserProfile.objects.filter(owner_hash=userhash)[0]
+    educationprofile = None
+    permissions = GrantedPermissions.get_permissions(profile.owner, request.user, 'Education Profile')
+    if (GrantedPermissions.get_permissions(profile.owner, request.user, 'Education Profile') != 'View'):
+        educationprofile = EducationProfile.objects.filter(owner=profile.owner)[0]
+    
     context = {
-        "profiles" : profiles,
+        "profile" : profile,
+        "educationprofile" : educationprofile
     }
     return render_to_response(
         'profile/show.html',

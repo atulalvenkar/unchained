@@ -4,15 +4,13 @@
 
 {% block main_content %}
 
-  {% if profiles %}
-    {% for profile in profiles %}
+  {% if profile %}
       <p>First Name : {{ profile.first_name }}</p>
       <p>Last Name : {{ profile.last_name }}</p>
       <p>Date of Birth : {{ profile.date_of_birth }}</p>
-      {% for edup in educationprofiles %}
-        <p> School Name : {{ edup.school_name }}</p>
-      {% endfor %}
-    {% endfor %}
+      {% if educationprofile %}
+        <p> School Name : {{ educationprofile.school_name }}</p>
+      {% endif %}
   {% else %}
     <p>Profile not found</p>
   {% endif %}
