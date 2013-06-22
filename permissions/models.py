@@ -10,7 +10,7 @@ class ObjectPermissions(models.Model):
         return self.object_type + self.permision_name
 
 
-class GrantedPermissions(models.Model):
+class OwnerObjectPermissionsAssoc(models.Model):
     object_owner = models.ForeignKey(User, related_name='owner')
     object_id    = models.CharField(max_length=50)
     object_permission = models.OneToOneField(ObjectPermissions)
@@ -29,7 +29,7 @@ class GrantedPermissions(models.Model):
                            )
 
         for object_info in objects_info:
-            permissions = GrantedPermissions.objects.filter(
+            permissions = OwnerObjectPermissionsAssoc.objects.filter(
                             object_owner = owner
                           ).filter(
                             grantee = grantee

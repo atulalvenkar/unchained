@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
+import time
 import md5
 
 class UserProfile(models.Model):
@@ -22,7 +23,8 @@ class UserProfile(models.Model):
         return self.first_name + ' ' + self.last_name
 
     def save(self, **kwargs):
-        self.owner_hash = md5.new(self.first_name).hexdigest()
+        hash_string = str(int(time.time())) + self.first_name
+        self.owner_hash = md5.new(hash_string).hexdigest()
         super(UserProfile, self).save(**kwargs)
 
 class EducationProfile(models.Model):
